@@ -1,6 +1,7 @@
 package com.aquib.food_zone.service;
 
 import com.aquib.food_zone.entity.Donor;
+import com.aquib.food_zone.exception.DonorNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -12,8 +13,12 @@ public class DonorService {
     final private Map<Integer, Donor> donors = new HashMap<>();
     private int id = 1;
 
-    public Donor getDonorById(int id){
-        return donors.get(id);
+    public Donor getDonorById(int id) {
+        Donor donor = donors.get(id);
+
+        if(donor == null)
+            throw new DonorNotFoundException("Donor with ID "+id+" not found.");
+        return donor;
     }
 
     public Donor createDonor(Donor donor){
