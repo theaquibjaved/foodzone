@@ -33,11 +33,15 @@ public class DonorController {
     }
 
     @PostMapping("/api/donors")
-    public ResponseEntity<Donor> postDonor(@RequestBody Donor donor){
+    public ResponseEntity<DonorResponse> postDonor(@RequestBody DonorRequest donorRequest){
+        DonorResponse donorResponse = new DonorResponse();
+        donorResponse.id = 1;
+        donorResponse.name = donorRequest.name;
+        donorResponse.city = donorRequest.city;
 
         return ResponseEntity
                 .status(201)
-                .body(donor);
+                .body(donorResponse);
     }
 
 }
