@@ -11,7 +11,5 @@ public class FoodDonationService {
         this.donorService = donorService;
     }
 
-    public String donationServiceMesasge(){
-        return donorService.getDonorMessage();
-    }
+
 }
