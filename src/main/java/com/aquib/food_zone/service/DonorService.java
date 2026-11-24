@@ -27,7 +27,7 @@ public class DonorService {
     }
 
     public Page<Donor> getDonorsByName(String name, Pageable pageable){
-        return donorRepository.findByNameIgnoreCase(name, pageable);
+        return donorRepository.findByNameContainingIgnoreCase(name, pageable);
     }
 
     public Page<Donor> getDonorsByNameAndCity(String name, String city, Pageable pageable){

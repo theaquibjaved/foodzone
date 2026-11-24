@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface DonorRepository extends JpaRepository<Donor, Integer> {
     Page<Donor> findByCityIgnoreCase(String city, Pageable pageable);
-    Page<Donor> findByNameIgnoreCase(String name, Pageable pageable);
+    Page<Donor> findByNameContainingIgnoreCase(String name, Pageable pageable);
     Page<Donor> findByNameAndCityIgnoreCase(String name, String city, Pageable pageable);
 }

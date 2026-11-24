@@ -25,28 +25,41 @@ public class DonorController {
     }
 
     @GetMapping("/api/donors")
-    public Page<Donor> getAllDonors(
+    public Page<DonorResponse> getAllDonors(
             @RequestParam(required = false) String city,
             @RequestParam(required = false) String name,
             Pageable pageable){
 
+        Page<Donor> donors = null;
+
         if (city != null && !city.isBlank() && name != null && !name.isBlank()) {
-            return donorService.getDonorsByNameAndCity(name, city, pageable);
-
-        if(city != null && !city.isBlank()){
-            return donorService.getDonorsByCity(city, pageable);
+            donors =  donorService.getDonorsByNameAndCity(name, city, pageable);
+        } else if(city != null && !city.isBlank()){
+            donors =  donorService.getDonorsByCity(city, pageable);
+        } else if(name != null && !name.isBlank()){
+            donors =  donorService.getDonorsByName(name, pageable);
+        } else {
+            donorService.getAllDonors(pageable);
         }
 
-        if(name != null && !name.isBlank()){
-            return donorService.getDonorsByName(name, pageable);
-        }
-
-        return donorService.getAllDonors(pageable);
+        return donors.map(donor -> {
+            DonorResponse response = new DonorResponse();
+            response.id = donor.getId();
+            response.name = donor.name;
+            response.city = donor.city;
+            return response;
+                }
+        );
     }
 
     @GetMapping("/api/donors/{id}")
-    public Donor getDonor(@PathVariable int id){
-        return donorService.getDonorById(id);
+    public DonorResponse getDonor(@PathVariable int id){
+        Donor donor = donorService.getDonorById(id);
+        DonorResponse donorResponse = new DonorResponse();
+        donorResponse.id = donor.getId();
+        donorResponse.name = donor.name;
+        donorResponse.city = donor.city;
+        return donorResponse;
     }
 
     @PostMapping("/api/donors")
