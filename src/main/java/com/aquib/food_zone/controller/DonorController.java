@@ -7,11 +7,11 @@ import com.aquib.food_zone.entity.Donor;
 import com.aquib.food_zone.service.DonorService;
 import com.aquib.food_zone.service.FoodDonationService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -25,8 +25,8 @@ public class DonorController {
     }
 
     @GetMapping("/api/donors")
-    public List<Donor> getAllDonors(){
-        return donorService.getAllDonors();
+    public Page<Donor> getAllDonors(Pageable pageable){
+        return donorService.getAllDonors(pageable);
     }
 
     @GetMapping("/api/donors/{id}")

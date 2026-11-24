@@ -4,6 +4,8 @@ import com.aquib.food_zone.dto.DonorPatchRequest;
 import com.aquib.food_zone.entity.Donor;
 import com.aquib.food_zone.exception.DonorNotFoundException;
 import com.aquib.food_zone.repositories.DonorRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +18,8 @@ public class DonorService {
         this.donorRepository = donorRepository;
     }
 
-    public List<Donor> getAllDonors() {
-        return donorRepository.findAll();
+    public Page<Donor> getAllDonors(Pageable pageable) {
+        return donorRepository.findAll(pageable);
     }
 
     public Donor getDonorById(int id) {
