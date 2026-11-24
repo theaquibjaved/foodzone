@@ -1,34 +1,57 @@
 package com.aquib.food_zone.service;
 
+import com.aquib.food_zone.dto.DonorPatchRequest;
 import com.aquib.food_zone.entity.Donor;
 import com.aquib.food_zone.exception.DonorNotFoundException;
+import com.aquib.food_zone.repositories.DonorRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 @Service
 public class DonorService {
-    final private Map<Integer, Donor> donors = new HashMap<>();
-    private int id = 1;
+    private final DonorRepository donorRepository;
+
+    public DonorService(DonorRepository donorRepository) {
+        this.donorRepository = donorRepository;
+    }
+
+    public List<Donor> getAllDonors() {
+        return donorRepository.findAll();
+    }
 
     public Donor getDonorById(int id) {
-        Donor donor = donors.get(id);
-
-        if(donor == null)
-            throw new DonorNotFoundException("Donor with ID "+id+" not found.");
-        return donor;
+        return donorRepository.findById(id)
+                .orElseThrow(() ->  new DonorNotFoundException("Donor with ID "+id+" not found."));
     }
 
     public Donor createDonor(Donor donor){
-        donor.setId(id);
-        donors.put(this.id, donor);
-        this.id++;
-        return donor;
+        return donorRepository.save(donor);
     }
 
-    public Collection<Donor> getAllDonors() {
-        return donors.values();
+    public Donor updateDonor(int id, Donor donor) {
+        Donor existingDonor = getDonorById(id);
+
+        existingDonor.name = donor.name;
+        existingDonor.city = donor.city;
+
+        return donorRepository.save(existingDonor);
+    }
+
+    public Donor patchDonor(int id, DonorPatchRequest request) {
+        Donor existingDonor = getDonorById(id);
+
+        if(request.name != null)
+            existingDonor.name = request.name;
+
+        if(request.city != null)
+            existingDonor.city = request.city;
+
+        return donorRepository.save(existingDonor);
+    }
+
+    public void deleteDonor(int id) {
+        Donor donor = getDonorById(id);
+        donorRepository.delete(donor);
     }
 }

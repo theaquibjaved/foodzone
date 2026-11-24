@@ -8,12 +8,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class FoodZoneApplication {
-
-//	@Bean
-//	CommandLineRunner runner(FoodDonationService service) {
-//		return args -> System.out.println(service.donationServiceMesasge());
-//	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(FoodZoneApplication.class, args);
 	}

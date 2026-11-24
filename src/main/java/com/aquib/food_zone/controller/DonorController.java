@@ -1,5 +1,6 @@
 package com.aquib.food_zone.controller;
 
+import com.aquib.food_zone.dto.DonorPatchRequest;
 import com.aquib.food_zone.dto.DonorRequest;
 import com.aquib.food_zone.dto.DonorResponse;
 import com.aquib.food_zone.entity.Donor;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 public class DonorController {
@@ -22,13 +24,15 @@ public class DonorController {
         this.donorService = donorService;
     }
 
-
+    @GetMapping("/api/donors")
+    public List<Donor> getAllDonors(){
+        return donorService.getAllDonors();
+    }
 
     @GetMapping("/api/donors/{id}")
     public Donor getDonor(@PathVariable int id){
         return donorService.getDonorById(id);
     }
-
 
     @PostMapping("/api/donors")
     public ResponseEntity<DonorResponse> postDonor(@Valid @RequestBody DonorRequest donorRequest){
@@ -48,9 +52,45 @@ public class DonorController {
                 .body(donorResponse);
     }
 
-    @GetMapping("/api/donors")
-    public Collection<Donor> getAllDonors(Donor donor){
-        return donorService.getAllDonors();
+    @PutMapping("/api/donors/{id}")
+    public ResponseEntity<DonorResponse> updateDonor(
+            @PathVariable int id,
+            @Valid @RequestBody DonorRequest donorRequest) {
+
+        Donor donor = new Donor();
+        donor.name = donorRequest.name;
+        donor.city = donorRequest.city;
+
+        Donor updatedDonor = donorService.updateDonor(id, donor);
+
+        DonorResponse response = new DonorResponse();
+        response.id = updatedDonor.getId();
+        response.name = updatedDonor.name;
+        response.city = updatedDonor.city;
+
+        return ResponseEntity.ok(response);
     }
+
+    @PatchMapping("/api/donors/{id}")
+    public ResponseEntity<DonorResponse> patchDonor(
+            @PathVariable int id,
+            @Valid @RequestBody DonorPatchRequest donorPatchRequest) {
+
+        Donor updatedDonor = donorService.patchDonor(id, donorPatchRequest);
+
+        DonorResponse response = new DonorResponse();
+        response.id = updatedDonor.getId();
+        response.name = updatedDonor.name;
+        response.city = updatedDonor.city;
+
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/api/donors/{id}")
+    public ResponseEntity<Void> deleteDonor(@PathVariable int id) {
+        donorService.deleteDonor(id);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }
