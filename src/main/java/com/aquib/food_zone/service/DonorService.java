@@ -22,6 +22,18 @@ public class DonorService {
         return donorRepository.findAll(pageable);
     }
 
+    public Page<Donor> getDonorsByCity(String city, Pageable pageable){
+        return donorRepository.findByCityIgnoreCase(city, pageable);
+    }
+
+    public Page<Donor> getDonorsByName(String name, Pageable pageable){
+        return donorRepository.findByNameIgnoreCase(name, pageable);
+    }
+
+    public Page<Donor> getDonorsByNameAndCity(String name, String city, Pageable pageable){
+        return donorRepository.findByNameAndCityIgnoreCase(name, city, pageable);
+    }
+
     public Donor getDonorById(int id) {
         return donorRepository.findById(id)
                 .orElseThrow(() ->  new DonorNotFoundException("Donor with ID "+id+" not found."));

@@ -25,7 +25,22 @@ public class DonorController {
     }
 
     @GetMapping("/api/donors")
-    public Page<Donor> getAllDonors(Pageable pageable){
+    public Page<Donor> getAllDonors(
+            @RequestParam(required = false) String city,
+            @RequestParam(required = false) String name,
+            Pageable pageable){
+
+        if (city != null && !city.isBlank() && name != null && !name.isBlank()) {
+            return donorService.getDonorsByNameAndCity(name, city, pageable);
+
+        if(city != null && !city.isBlank()){
+            return donorService.getDonorsByCity(city, pageable);
+        }
+
+        if(name != null && !name.isBlank()){
+            return donorService.getDonorsByName(name, pageable);
+        }
+
         return donorService.getAllDonors(pageable);
     }
 
